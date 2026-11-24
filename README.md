@@ -556,6 +556,7 @@ Each is described in a comment where it is read.
 
 - Everything in shadow is black (see above).
 - On Wine and Proton builds whose built-in `d3dcompiler_47` rejects this source (Wine 11.22, GE-Proton 11-12/11-14 and Proton Experimental experimental-11.0-20261112 do), the run-time HLSL compiles need DXC's `dxcompiler.dll` and `dxil.dll` (see the last rendering item above).
+- On GE-Proton11-14 / vkd3d-proton 3.2 the helper shaders compile with DXC, but a separate GPU/driver fault (NVRM `gpu_vaspace.c` assertions) still hangs the machine after a few minutes; this change does not address it.
 - The interior of the first gameplay room is sometimes not drawn after the cutscene hands over to gameplay.
 - Around 24 GB of memory is in use during play, about 16 GB of it in memory: the 32 GB test PC has about 1 to 5 GB free, and the 12 GB card is nearly full, so textures are let go and made again for lack of room.
 - A few style lints are switched off for this fork in the workspace `Cargo.toml` until the newer code is tidied.
