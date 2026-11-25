@@ -1611,6 +1611,7 @@ mod host {
                     .collect();
                 down.extend(held);
             }
+            log_host_keys(focus, &down);
             down.into_iter()
                 .map(|vk| KeyState {
                     // SAFETY: plain query.
@@ -1808,6 +1809,29 @@ mod host {
                 Duration::try_from_secs_f64(hold).ok()?,
                 what,
             ))
+        }
+    }
+
+    /// What the host keyboard gives, when it changes:
+    /// `VICTORY_LOG=victory_hle::modules::gameinput=debug`.
+    fn log_host_keys(focus: bool, down: &[u8]) {
+        if !tracing::enabled!(tracing::Level::DEBUG) {
+            return;
+        }
+        static LAST: Mutex<Option<(bool, Vec<u8>)>> = Mutex::new(None);
+        let mut last = lock(&LAST);
+        if last.as_ref().is_none_or(|(f, d)| *f != focus || d != down) {
+            *last = Some((focus, down.to_vec()));
+            let mut foreground = 0;
+            // SAFETY: plain queries; a null window gives process 0.
+            unsafe { GetWindowThreadProcessId(GetForegroundWindow(), &mut foreground) };
+            tracing::debug!(
+                focus,
+                foreground_pid = foreground,
+                our_pid = unsafe { GetCurrentProcessId() },
+                keys = ?down.iter().map(|&vk| super::super::controls::key_name(vk)).collect::<Vec<_>>(),
+                "host keys"
+            );
         }
     }
 
