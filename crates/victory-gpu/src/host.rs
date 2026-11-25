@@ -8917,7 +8917,7 @@ void main() {
             eprintln!("queue2_tests: skipped, the copy is not in the card's memory (VICTORY_CARD_BUFFERS_MIN_MB=1)");
             return;
         }
-        let code = compile(ADD, windows::core::s!("main"), windows::core::s!("cs_5_1")).expect("the test's shader");
+        let code = compile(ADD, "main", "cs_5_1").expect("the test's shader");
         // SAFETY: the shader's own root signature; plain creation.
         let (root, pso): (ID3D12RootSignature, ID3D12PipelineState) = unsafe {
             let root: ID3D12RootSignature = host.device.CreateRootSignature(0, &code).expect("a root signature");
@@ -9079,7 +9079,7 @@ void main() {
             eprintln!("queue2_tests: skipped, the copy is not in the card's memory (VICTORY_CARD_BUFFERS_MIN_MB=1)");
             return;
         }
-        let code = compile(TWICE, windows::core::s!("main"), windows::core::s!("cs_5_1")).expect("the test's shader");
+        let code = compile(TWICE, "main", "cs_5_1").expect("the test's shader");
         // SAFETY: the shader's own root signature; plain creation.
         let (root, pso): (ID3D12RootSignature, ID3D12PipelineState) = unsafe {
             let root: ID3D12RootSignature = host.device.CreateRootSignature(0, &code).expect("a root signature");
